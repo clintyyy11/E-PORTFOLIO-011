@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clint Baralin – Understanding the Self E-Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#060a1c; --deep:#0c1538; --panel:rgba(14,24,64,.62); --line:rgba(92,225,255,.28);
+  --cyan:#5ce1ff; --amber:#ffb454; --violet:#8b7bff; --text:#dbe6ff; --dim:#8b9bc7;
+  color-scheme:dark; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:radial-gradient(ellipse at 8% 0%,rgba(150,60,200,.38) 0%,transparent 45%),radial-gradient(ellipse at 70% 10%,#14226b 0%,var(--deep) 35%,var(--void) 80%);
+  color:var(--text);font-family:'Exo 2',system-ui,sans-serif;font-weight:300;line-height:1.6}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:20px 18px 60px}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--line);padding-bottom:14px}
+.brand{font-family:Orbitron,sans-serif;font-weight:700;letter-spacing:.08em;font-size:15px;color:var(--cyan)}
+.status{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:8px}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:blink 1.8s infinite}
+@keyframes blink{50%{opacity:.25}}
+nav{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}
+nav button{font:600 14px 'Exo 2',sans-serif;color:var(--text);background:var(--panel);border:1px solid var(--line);
+  padding:9px 16px;cursor:pointer;clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  transition:background .2s,color .2s}
+nav button:hover{background:rgba(92,225,255,.16)}
+nav button[aria-selected="true"]{background:var(--cyan);color:#04102a}
+button:focus-visible,.slot:focus-visible,[contenteditable]:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+section.tab{display:none}
+section.tab.on{display:block}
+h1,h2{font-family:Orbitron,sans-serif;margin:0 0 10px;line-height:1.15}
+h1{font-size:clamp(30px,6vw,56px);font-weight:900;letter-spacing:.03em}
+h2{font-size:clamp(20px,3.5vw,28px);font-weight:700;color:var(--cyan)}
+.lead{max-width:60ch;color:var(--dim);font-size:17px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.meta span{border:1px solid var(--line);padding:6px 12px;font-size:14px;background:var(--panel)}
+.solar{width:100%;max-width:420px;height:460px;justify-self:center;cursor:grab;touch-action:pan-y}
+.solar:active{cursor:grabbing}
+.solar canvas{display:block;width:100%;height:100%}
+
+
+.jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.jump button{font:400 13px 'Exo 2',sans-serif;color:var(--amber);background:none;border:1px solid rgba(255,180,84,.5);padding:6px 12px;cursor:pointer}
+.jump button:hover{background:rgba(255,180,84,.14)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:18px}
+.card{background:var(--panel);border:1px solid var(--line);padding:16px;backdrop-filter:blur(6px);position:relative}
+.card::before{content:"";position:absolute;left:-1px;top:-1px;width:18px;height:18px;border-left:2px solid var(--cyan);border-top:2px solid var(--cyan)}
+.card h3{margin:0 0 4px;font:600 17px 'Exo 2',sans-serif;color:var(--text)}
+.pts{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:14px;color:var(--dim)}
+.pts b{font-family:Orbitron,sans-serif;color:var(--amber);font-size:15px}
+.pts b[contenteditable]{min-width:5ch;display:inline-block}
+.slot{display:grid;place-items:center;text-align:center;aspect-ratio:4/3;margin-top:10px;cursor:pointer;color:var(--dim);font-size:14px;
+  border:1px dashed var(--line);background:rgba(6,10,28,.55);overflow:hidden;position:relative}
+.slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.slot:hover{border-color:var(--cyan);color:var(--cyan)}
+.slot input{display:none}
+.bar{height:8px;background:rgba(92,225,255,.12);margin-top:8px;overflow:hidden}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--violet),var(--cyan));transition:width .5s}
+.note{color:var(--dim);font-size:14px;margin-top:14px}
+.take{min-height:110px;margin-top:10px;color:var(--text);border-top:1px solid var(--line);padding-top:10px}
+.take:empty::before{content:attr(data-ph);color:var(--dim)}
+.take{white-space:pre-wrap}
+.rm{margin-top:8px;font:400 12px 'Exo 2',sans-serif;color:var(--amber);background:none;border:1px solid rgba(255,180,84,.5);padding:4px 10px;cursor:pointer}
+.rm[hidden],.toast[hidden]{display:none}
+.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:5;max-width:320px;background:var(--panel);border:1px solid var(--amber);padding:10px 14px;font-size:14px;backdrop-filter:blur(6px)}
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;color:var(--dim);font-size:13px}
+@media(max-width:760px){.hero{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.status i{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">UNDERSTANDING THE SELF</div>
+    <div class="status"><i></i>E-portfolio online · BSIT 1B</div>
+  </header>
+  <nav id="nav" role="tablist" aria-label="Portfolio sections"></nav>
+
+  <section class="tab on" id="Home">
+    <div class="hero">
+      <div>
+        <h1>Clint E. Baralin</h1>
+        <p class="lead">A record of what I made, wrote, and learned in Understanding the Self, from the first activity to the final takeaways.</p>
+        <div class="meta"><span>BSIT 1B</span><span>Submitted to Ma’am Yvonee G. Putang</span></div>
+        <div class="jump" id="jump"></div>
+      </div>
+      <div class="solar" id="solar" role="img" aria-label="3D solar system, drag to rotate"></div>
+    </div>
+    <div class="grid" id="summary"></div>
+  </section>
+
+  <div id="periods"></div>
+
+  <section class="tab" id="Takeaways">
+    <h2>Takeaways</h2>
+    <p class="lead">What I take away from this course.</p>
+    <div class="grid" id="takeGrid"></div>
+  </section>
+
+  <footer>Clint E. Baralin · BSIT 1B · Understanding the Self</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// =====================================================================
+//  EDIT YOUR CONTENT HERE
+//  title  : name of the activity
+//  max    : highest possible points
+//  points : the score you got (a number)
+//  image  : your scanned paper. Put the image file in the same folder as
+//           this html file and write its name, e.g. "prelim-1.jpg",
+//           or paste a full link like "https://...". Leave "" for none.
+// =====================================================================
+var DATA = {
+  "Preliminary": [
+    {title:"Activity 1", max:20, points:0, image:""},
+    {title:"Activity 2", max:20, points:0, image:""},
+    {title:"Activity 3", max:20, points:0, image:""}
+  ],
+  "Midterms": [
+    {title:"Activity 1", max:30, points:0, image:""},
+    {title:"Activity 2", max:30, points:0, image:""},
+    {title:"Activity 3", max:30, points:0, image:""}
+  ],
+  "Pre-Finals": [
+    {title:"Activity 1", max:30, points:0, image:""},
+    {title:"Activity 2", max:30, points:0, image:""},
+    {title:"Activity 3", max:30, points:0, image:""}
+  ],
+  "Finals": [
+    {title:"Activity 1", max:40, points:0, image:""},
+    {title:"Activity 2", max:40, points:0, image:""},
+    {title:"Activity 3", max:40, points:0, image:""}
+  ]
+};
+
+// Your takeaways. Write your own text between the quotes (use \n for a new line).
+var TAKEAWAYS = [
+  {title:"What I learned about myself", text:""},
+  {title:"What surprised me", text:""},
+  {title:"What I will carry forward", text:""}
+];
+// ===================== END OF CONTENT =====================
+var TABS = ["Home","Preliminary","Midterms","Pre-Finals","Finals","Takeaways"];
+var nav = document.getElementById('nav'), jump = document.getElementById('jump');
+
+function show(name){
+  TABS.forEach(function(t){
+    var el = document.getElementById(t.replace(/\W/g,''));
+    if(el) el.classList.toggle('on', t===name);
+  });
+  nav.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-selected', b.textContent===name); });
+  window.scrollTo({top:0});
+}
+TABS.forEach(function(t){
+  var b = document.createElement('button'); b.textContent = t; b.setAttribute('role','tab');
+  b.onclick = function(){ show(t); }; nav.appendChild(b);
+});
+Object.keys(DATA).concat(["Takeaways"]).forEach(function(t){
+  var j = document.createElement('button'); j.textContent = 'Open ' + t; j.onclick = function(){ show(t); }; jump.appendChild(j);
+});
+
+function updateBars(){
+  var sum = document.getElementById('summary'); sum.innerHTML = '';
+  Object.keys(DATA).forEach(function(p){
+    var id = p.replace(/\W/g,''), got = 0, max = 0;
+    document.querySelectorAll('#' + id + ' .pts b').forEach(function(b){ got += parseFloat(b.textContent) || 0; });
+    DATA[p].forEach(function(i){ max += i.max; });
+    var c = document.createElement('div'); c.className = 'card';
+    c.innerHTML = '<h3>' + p + '</h3><div class="pts"><span>Points earned</span><b>' + got + ' / ' + max + '</b></div><div class="bar"><div style="width:' + Math.min(100, got / max * 100) + '%"></div></div>';
+    sum.appendChild(c);
+  });
+}
+
+var host = document.getElementById('periods');
+Object.keys(DATA).forEach(function(p){
+  var sec = document.createElement('section'); sec.className = 'tab'; sec.id = p.replace(/\W/g,'');
+  var h = document.createElement('h2'); h.textContent = p; sec.appendChild(h);
+  var g = document.createElement('div'); g.className = 'grid'; sec.appendChild(g);
+  DATA[p].forEach(function(it){
+    var c = document.createElement('div'); c.className = 'card';
+    var t = document.createElement('h3'); t.textContent = it.title; c.appendChild(t);
+    var slot = document.createElement('div'); slot.className = 'slot';
+    if(it.image){
+      var img = document.createElement('img'); img.src = it.image; img.alt = it.title + ' scan'; slot.appendChild(img);
+    } else {
+      slot.style.cursor = 'default'; slot.textContent = 'Scan goes here';
+    }
+    c.appendChild(slot);
+    var pts = document.createElement('div'); pts.className = 'pts';
+    pts.innerHTML = '<span>Points</span><span><b></b> / ' + it.max + '</span>';
+    pts.querySelector('b').textContent = it.points;
+    c.appendChild(pts); g.appendChild(c);
+  });
+  host.appendChild(sec);
+});
+var tg = document.getElementById('takeGrid');
+TAKEAWAYS.forEach(function(tk){
+  var c = document.createElement('div'); c.className = 'card';
+  var h3 = document.createElement('h3'); h3.textContent = tk.title; c.appendChild(h3);
+  var d = document.createElement('div'); d.className = 'take'; d.textContent = tk.text; c.appendChild(d);
+  tg.appendChild(c);
+});
+updateBars();
+show('Home');
+
+
+// ---- Animated background: stars, grid, data streams, waveforms, radar ring ----
+(function(){
+  var cv = document.getElementById('bg'), x = cv.getContext('2d'), W, H, t = 0;
+  var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stars = [], cols = [], bars = [], traces = [], hist = {a:[], b:[]}, nodes = [], gp = [];
+  for(var gi0=0; gi0<240; gi0++){ var yy0 = 1 - 2 * (gi0 + .5) / 240, rr0 = Math.sqrt(1 - yy0 * yy0), th0 = gi0 * 2.399963; gp.push([Math.cos(th0) * rr0, yy0, Math.sin(th0) * rr0]); }
+  function size(){
+    var r = window.devicePixelRatio || 1; W = innerWidth; H = innerHeight;
+    cv.width = W * r; cv.height = H * r; x.setTransform(r,0,0,r,0,0);
+    stars = []; for(var i=0;i<Math.round(W*H/7000);i++) stars.push({x:Math.random()*W,y:Math.random()*H,z:Math.random()*.9+.1,p:Math.random()*6});
+    cols = []; for(var j=0;j<Math.round(W/70);j++) cols.push({x:j*70+Math.random()*40,y:Math.random()*H,v:.3+Math.random()*.7,s:''});
+    bars = []; for(var k=0;k<18;k++) bars.push({h:Math.random(),g:Math.random()});
+    traces = [];
+    for(var m=0;m<Math.max(8,Math.round(H/70));m++){
+      var dir = m%2 ? -1 : 1, cx = dir>0 ? 0 : W, cy = Math.random()*H, pts = [[cx,cy]], cum = [0], len = 0;
+      var add = function(nx,ny){ len += Math.hypot(nx-cx,ny-cy); cum.push(len); pts.push([nx,ny]); cx = nx; cy = ny; };
+      for(var q=0;q<4;q++){
+        add(cx + dir*(W*.04+Math.random()*W*.06), cy);
+        var dd = (Math.random()<.5?-1:1)*(20+Math.random()*40);
+        add(cx + dir*Math.abs(dd), cy + dd);
+      }
+      traces.push({pts:pts,cum:cum,len:len,v:.8+Math.random()*1.4,o:Math.random()*400});
+    }
+  }
+  function pointAt(tr,d){
+    if(d < 0 || d > tr.len) return null;
+    for(var i=1;i<tr.cum.length;i++){
+      if(d <= tr.cum[i]){
+        var u = (d - tr.cum[i-1]) / (tr.cum[i] - tr.cum[i-1]), a0 = tr.pts[i-1], b0 = tr.pts[i];
+        return [a0[0] + (b0[0]-a0[0])*u, a0[1] + (b0[1]-a0[1])*u];
+      }
+    }
+    return null;
+  }
+  function frame(){
+    t += 1; x.clearRect(0,0,W,H);
+    // stars drifting with parallax
+    stars.forEach(function(s){
+      s.x -= s.z * .25; if(s.x < 0) s.x = W;
+      x.globalAlpha = .35 + .65 * Math.abs(Math.sin(t / 50 + s.p)) * s.z;
+      x.fillStyle = '#dbe6ff'; x.fillRect(s.x, s.y, s.z * 2, s.z * 2);
+    });
+    // blueprint grid sliding
+    x.globalAlpha = .07; x.strokeStyle = '#5ce1ff'; x.lineWidth = 1; x.beginPath();
+    var off = (t * .3) % 60;
+    for(var gx=-off; gx<W; gx+=60){ x.moveTo(gx,0); x.lineTo(gx,H); }
+    for(var gy=off; gy<H; gy+=60){ x.moveTo(0,gy); x.lineTo(W,gy); }
+    x.stroke();
+    // circuit traces with traveling pulses
+    traces.forEach(function(tr){
+      x.globalAlpha = .2; x.strokeStyle = '#5ce1ff'; x.lineWidth = 1; x.beginPath();
+      tr.pts.forEach(function(p,i){ i ? x.lineTo(p[0],p[1]) : x.moveTo(p[0],p[1]); });
+      x.stroke();
+      tr.pts.forEach(function(p,i){ if(i%2===0){ x.beginPath(); x.arc(p[0],p[1],2.5,0,6.283); x.stroke(); } });
+      var d = (t * tr.v + tr.o) % (tr.len + 120);
+      for(var k2=0;k2<6;k2++){
+        var pp = pointAt(tr, d - k2 * 5); if(!pp) continue;
+        x.globalAlpha = .9 - k2 * .14; x.fillStyle = '#e8fbff'; x.fillRect(pp[0]-1.5, pp[1]-1.5, 3, 3);
+      }
+    });
+    // falling hex data
+    x.font = '12px "Exo 2", monospace'; x.fillStyle = '#5ce1ff';
+    cols.forEach(function(c){
+      c.y += c.v; if(c.y > H + 160) c.y = -20;
+      for(var n=0;n<9;n++){
+        x.globalAlpha = .22 * (1 - n / 9);
+        x.fillText(((c.x * 7 + n * 31 + Math.floor(t / 30)) % 256).toString(16).toUpperCase().padStart(2,'0'), c.x, c.y - n * 15);
+      }
+    });
+    // data terrain: perspective dot field with rising spikes
+    var hz = H * .62, rows = 15, cs = Math.ceil(W / 34) + 2;
+    for(var rw=0; rw<rows; rw++){
+      var f = rw / (rows - 1), pz = Math.pow(f, 1.8), rowY = hz + pz * (H * .38), sc = .25 + pz * 1.6;
+      for(var cl=-cs; cl<=cs; cl++){
+        var dx = W / 2 + cl * 34 * sc;
+        if(dx < -10 || dx > W + 10) continue;
+        var gy2 = rowY + Math.sin(cl * .45 + rw * .6 + t / 45) * 16 * sc + Math.sin(cl * .17 - t / 70 + rw) * 22 * sc;
+        x.globalAlpha = .12 + .55 * f;
+        x.fillStyle = ((cl + rw) % 11 === 0) ? '#ffb454' : (cl < 0 ? '#8b7bff' : '#5ce1ff');
+        x.fillRect(dx, gy2, 1 + sc * 1.6, 1 + sc * 1.6);
+        if(rw > 3 && ((cl * 7 + rw * 3) % 13 + 13) % 13 === 0){ x.globalAlpha = .3; x.fillRect(dx, gy2 - 30 * sc, 1, 30 * sc); }
+      }
+    }
+    // waveforms removed
+    [].forEach(function(w,i){
+      x.globalAlpha = .45; x.strokeStyle = w[0]; x.lineWidth = 1.5; x.beginPath();
+      for(var px=0; px<=W; px+=6){
+        var py = H - 70 - i * 22 + Math.sin(px / 70 * w[2] + t / 40 + w[1]) * 14 + Math.sin(px / 23 + t / 17) * 3;
+        px === 0 ? x.moveTo(px, py) : x.lineTo(px, py);
+      }
+      x.stroke();
+    });
+    // live bar graph, top right
+    if(t % 20 === 0) bars.forEach(function(b){ b.g = Math.random(); });
+    var bx = W - 18 * 11 - 20;
+    bars.forEach(function(b,i){
+      b.h += (b.g - b.h) * .05;
+      x.globalAlpha = .4; x.fillStyle = i % 5 === 0 ? '#ffb454' : '#5ce1ff';
+      x.fillRect(bx + i * 11, 70 - b.h * 50, 7, b.h * 50);
+    });
+    // extra layer: network, hex cluster, data globe, trackers, gauges, spectrum, scan sweep
+    x.font = '11px "Exo 2", monospace';
+    if(!nodes.length) for(var ni=0; ni<40; ni++) nodes.push({x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.5, vy:(Math.random()-.5)*.5});
+    x.lineWidth = 1;
+    nodes.forEach(function(n,i){
+      n.x += n.vx; n.y += n.vy; if(n.x < 0 || n.x > W) n.vx *= -1; if(n.y < 0 || n.y > H) n.vy *= -1;
+      for(var j=i+1; j<nodes.length; j++){
+        var m2 = nodes[j], ddx = n.x - m2.x, ddy = n.y - m2.y, dist = Math.sqrt(ddx*ddx + ddy*ddy);
+        if(dist < 150){ x.globalAlpha = (1 - dist / 150) * .28; x.strokeStyle = '#8b7bff'; x.beginPath(); x.moveTo(n.x, n.y); x.lineTo(m2.x, m2.y); x.stroke(); }
+      }
+      x.globalAlpha = .6; x.fillStyle = '#5ce1ff'; x.fillRect(n.x - 1.5, n.y - 1.5, 3, 3);
+    });
+    var sy = (t * 1.4) % (H + 240) - 120, sg = x.createLinearGradient(0, sy - 60, 0, sy + 60);
+    sg.addColorStop(0, 'rgba(92,225,255,0)'); sg.addColorStop(.5, 'rgba(92,225,255,.1)'); sg.addColorStop(1, 'rgba(92,225,255,0)');
+    x.globalAlpha = 1; x.fillStyle = sg; x.fillRect(0, sy - 60, W, 120);
+    if(W >= 900){
+      var hs = 13, hdx = hs * 1.732, hdy = hs * 1.5, hx0 = W - 230, hy0 = H * .12;
+      for(var hr=0; hr<5; hr++) for(var hc=0; hc<6; hc++){
+        var hcx = hx0 + hc * hdx + (hr % 2) * hdx / 2, hcy = hy0 + hr * hdy, lit = Math.sin(t / 35 + hc * 1.7 + hr * 2.9) > .72;
+        x.beginPath();
+        for(var hv=0; hv<6; hv++){ var ha = Math.PI / 3 * hv + Math.PI / 6, hpx = hcx + Math.cos(ha) * hs, hpy = hcy + Math.sin(ha) * hs; hv ? x.lineTo(hpx, hpy) : x.moveTo(hpx, hpy); }
+        x.closePath(); x.globalAlpha = lit ? .8 : .22; x.strokeStyle = lit ? '#ffb454' : '#5ce1ff'; x.lineWidth = 1; x.stroke();
+        if(lit){ x.globalAlpha = .25; x.fillStyle = '#ffb454'; x.fill(); }
+      }
+      var gcx = W - 100, gcy = H * .5, gr0 = 62, ang0 = t * .012, ca = Math.cos(ang0), sa = Math.sin(ang0), tilt = .45, ct = Math.cos(tilt), st = Math.sin(tilt);
+      x.fillStyle = '#5ce1ff';
+      gp.forEach(function(p){
+        var px3 = p[0] * ca + p[2] * sa, pz3 = -p[0] * sa + p[2] * ca, py3 = p[1] * ct - pz3 * st, pzz = p[1] * st + pz3 * ct;
+        x.globalAlpha = .12 + .55 * (pzz + 1) / 2; x.fillRect(gcx + px3 * gr0, gcy + py3 * gr0, 1.6, 1.6);
+      });
+      x.globalAlpha = .35; x.strokeStyle = '#5ce1ff'; x.lineWidth = 1;
+      x.beginPath(); x.arc(gcx, gcy, gr0, 0, 6.283); x.stroke();
+      x.beginPath(); x.ellipse(gcx, gcy, gr0, gr0 * st, 0, 0, 6.283); x.stroke();
+      x.setLineDash([4, 8]); x.lineDashOffset = -t * .3; x.beginPath(); x.arc(gcx, gcy, gr0 + 12, 0, 6.283); x.stroke(); x.setLineDash([]);
+      x.globalAlpha = .6; x.fillText('geo link', gcx - 22, gcy + gr0 + 34);
+      for(var sb=0; sb<26; sb++){
+        var sh = 4 + (Math.sin(t / 9 + sb * .7) + Math.sin(t / 14 + sb * 1.9) + 2) * 6;
+        x.globalAlpha = .55; x.fillStyle = sb % 6 === 0 ? '#ffb454' : '#5ce1ff'; x.fillRect(W / 2 - 80 + sb * 6.2, 50 - sh, 4, sh);
+      }
+    }
+    for(var rk=0; rk<3; rk++){
+      var rx2 = W * (.5 + .36 * Math.sin(t / 230 + rk * 2.1)), ry2 = H * (.38 + .28 * Math.sin(t / 300 + rk * 3.3)), rs = 14;
+      x.globalAlpha = .7; x.strokeStyle = rk === 1 ? '#ffb454' : '#5ce1ff'; x.lineWidth = 1.5;
+      [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(function(c){
+        x.beginPath(); x.moveTo(rx2 + c[0] * rs, ry2 + c[1] * (rs - 6)); x.lineTo(rx2 + c[0] * rs, ry2 + c[1] * rs); x.lineTo(rx2 + c[0] * (rs - 6), ry2 + c[1] * rs); x.stroke();
+      });
+      x.fillStyle = x.strokeStyle; x.fillRect(rx2 - 1, ry2 - 1, 2, 2);
+      x.fillText('trk 0' + (rk + 1) + '  ' + Math.round(rx2) + ',' + Math.round(ry2), rx2 + rs + 6, ry2 + 4);
+    }
+    if(W >= 1250){
+      for(var ga=0; ga<3; ga++){
+        var gv = .5 + .4 * Math.sin(t / 70 + ga * 2), gyy = H * .3 + ga * 70, gcol = ga === 1 ? '#ffb454' : '#5ce1ff';
+        x.lineWidth = 3; x.globalAlpha = .2; x.strokeStyle = gcol; x.beginPath(); x.arc(W - 60, gyy, 22, 0, 6.283); x.stroke();
+        x.globalAlpha = .85; x.beginPath(); x.arc(W - 60, gyy, 22, -1.5708, -1.5708 + gv * 6.283); x.stroke();
+        x.fillStyle = gcol; x.globalAlpha = .8; x.fillText(Math.round(gv * 100) + '%', W - 70, gyy + 4);
+      }
+    }
+    // HUD frame, telemetry readouts, live signal graph, ticker
+    x.lineWidth = 2; x.strokeStyle = '#5ce1ff'; x.globalAlpha = .55;
+    var L = 26, mg = 10;
+    [[mg,mg,1,1],[W-mg,mg,-1,1],[mg,H-mg,1,-1],[W-mg,H-mg,-1,-1]].forEach(function(c){
+      x.beginPath(); x.moveTo(c[0]+c[2]*L, c[1]); x.lineTo(c[0], c[1]); x.lineTo(c[0], c[1]+c[3]*L); x.stroke();
+    });
+    if(t % 3 === 0){
+      hist.a.push(.5 + .3 * Math.sin(t / 40) + (Math.random() - .5) * .25);
+      hist.b.push(.5 + .25 * Math.sin(t / 23 + 1) + (Math.random() - .5) * .15);
+      if(hist.a.length > 60){ hist.a.shift(); hist.b.shift(); }
+    }
+    x.font = '11px "Exo 2", monospace';
+    if(W >= 700){
+      var gx0 = 22, gy0 = H - 140, gw = 200, gh = 70;
+      x.globalAlpha = 1; x.fillStyle = 'rgba(6,10,28,.55)'; x.fillRect(gx0, gy0, gw, gh);
+      x.globalAlpha = .4; x.lineWidth = 1; x.strokeStyle = '#5ce1ff'; x.strokeRect(gx0, gy0, gw, gh);
+      x.globalAlpha = .12; x.beginPath();
+      for(var gi=1; gi<4; gi++){ x.moveTo(gx0, gy0 + gi * gh / 4); x.lineTo(gx0 + gw, gy0 + gi * gh / 4); }
+      for(var gj=1; gj<6; gj++){ x.moveTo(gx0 + gj * gw / 6, gy0); x.lineTo(gx0 + gj * gw / 6, gy0 + gh); }
+      x.stroke();
+      [[hist.a,'#5ce1ff'],[hist.b,'#ffb454']].forEach(function(sr){
+        x.globalAlpha = .9; x.strokeStyle = sr[1]; x.lineWidth = 1.5; x.beginPath();
+        sr[0].forEach(function(v,i){ var px2 = gx0 + i / 59 * gw, py2 = gy0 + gh - 6 - v * (gh - 12); i ? x.lineTo(px2, py2) : x.moveTo(px2, py2); });
+        x.stroke();
+      });
+      x.globalAlpha = .6; x.fillStyle = '#5ce1ff'; x.fillText('signal / power', gx0, gy0 - 6);
+    }
+    if(W >= 1250){
+      var tl = ['link  stable', 'orbit  ' + (7.66 + Math.sin(t / 90) * .04).toFixed(2) + ' km/s', 'alt  ' + (408 + Math.sin(t / 120) * 3).toFixed(1) + ' km',
+        'sig  ' + (92 + Math.sin(t / 33) * 4).toFixed(0) + '%', 'cpu  ' + (48 + Math.sin(t / 57) * 12).toFixed(0) + '%', 'temp  ' + (21.4 + Math.sin(t / 80)).toFixed(1) + ' C'];
+      x.fillStyle = '#5ce1ff';
+      tl.forEach(function(ln,i){ x.globalAlpha = .55; x.fillText(ln, 24, 120 + i * 18); });
+    }
+    var tk = 'sys ok   //   data link 100%   //   scan complete   //   uplink active   //   ', tw = x.measureText(tk).width || 400;
+    x.globalAlpha = .4; x.fillStyle = '#5ce1ff';
+    for(var tx = -((t * .6) % tw); tx < W; tx += tw) x.fillText(tk, tx, H - 18);
+    x.globalAlpha = 1;
+    if(!still) requestAnimationFrame(frame);
+  }
+  addEventListener('resize', size); size(); frame();
+})();
+
+// ---- 3D solar system (three.js) ----
+(function(){
+  var box = document.getElementById('solar'); if(!box || !window.THREE) return;
+  var T = THREE, still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var scene = new T.Scene(), cam = new T.PerspectiveCamera(40, 1, .1, 200);
+  var ren = new T.WebGLRenderer({antialias:true, alpha:true});
+  ren.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); box.appendChild(ren.domElement);
+  var sys = new T.Group(); scene.add(sys);
+  scene.add(new T.AmbientLight(0xffffff, .32));
+  sys.add(new T.PointLight(0xfff0d0, 1.9, 0));
+
+  function rnd(s){ return function(){ s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+  function tex(pal, kind, seed){
+    var r = rnd(seed), c = document.createElement('canvas'); c.width = 256; c.height = 128;
+    var g = c.getContext('2d'); g.fillStyle = pal[0]; g.fillRect(0,0,256,128);
+    if(kind === 'bands'){
+      for(var y=0; y<128;){ var h = 3 + r()*12; g.globalAlpha = .35 + r()*.5; g.fillStyle = pal[Math.floor(r()*pal.length)]; g.fillRect(0,y,256,h); y += h; }
+    } else if(kind === 'earth'){
+      g.fillStyle = '#3f9a52'; g.globalAlpha = .9;
+      for(var i=0;i<26;i++){ g.beginPath(); g.ellipse(r()*256, 20 + r()*88, 8 + r()*22, 5 + r()*12, r()*3, 0, 6.283); g.fill(); }
+      g.fillStyle = '#fff'; g.globalAlpha = .85; g.fillRect(0,0,256,8); g.fillRect(0,120,256,8);
+    } else {
+      for(var j=0;j<260;j++){ g.globalAlpha = .25; g.fillStyle = pal[1 + Math.floor(r()*(pal.length-1))]; g.beginPath(); g.arc(r()*256, r()*128, 1 + r()*5, 0, 6.283); g.fill(); }
+    }
+    return new T.CanvasTexture(c);
+  }
+  function orbitLine(R){
+    var p = []; for(var i=0;i<=128;i++){ var a = i / 128 * 6.283; p.push(new T.Vector3(Math.cos(a)*R, 0, Math.sin(a)*R)); }
+    return new T.Line(new T.BufferGeometry().setFromPoints(p), new T.LineBasicMaterial({color:0x9fdcff, transparent:true, opacity:.35}));
+  }
+
+  // sun with soft glow
+  var sun = new T.Mesh(new T.SphereGeometry(.9, 32, 24), new T.MeshBasicMaterial({map: tex(['#ff9a2a','#ffd27a','#ff7a1a'], 'plain', 5)}));
+  sys.add(sun);
+  var gc = document.createElement('canvas'); gc.width = gc.height = 128;
+  var gg = gc.getContext('2d'), grad = gg.createRadialGradient(64,64,0,64,64,64);
+  grad.addColorStop(0,'rgba(255,200,110,.95)'); grad.addColorStop(.35,'rgba(255,150,60,.35)'); grad.addColorStop(1,'rgba(255,120,40,0)');
+  gg.fillStyle = grad; gg.fillRect(0,0,128,128);
+  var glow = new T.Sprite(new T.SpriteMaterial({map:new T.CanvasTexture(gc), blending:T.AdditiveBlending, transparent:true, depthWrite:false}));
+  glow.scale.set(5.2, 5.2, 1); sys.add(glow);
+
+  // planets: radius, orbit, speed, palette, texture kind
+  var defs = [
+    [.14, 1.7, 1.00, ['#8a8580','#b5aca0','#6f6a64'], 'plain'],
+    [.22, 2.4, .75, ['#d9b27a','#f0d9a8','#c49a5e'], 'plain'],
+    [.24, 3.1, .60, ['#2a62c9'], 'earth'],
+    [.18, 3.7, .48, ['#b5532f','#d98a5b','#8c3d20'], 'plain'],
+    [.62, 6.2, .26, ['#c98f5c','#e8d0b0','#a86a3d','#f2e3c8'], 'bands'],
+    [.50, 7.9, .20, ['#d8c08a','#ecdcb0','#c4a96e'], 'bands'],
+    [.33, 9.2, .14, ['#9ad8d6','#b5ebe8'], 'bands'],
+    [.32, 10.4, .11, ['#3f62d8','#5a82f0','#2d49a8'], 'bands']
+  ];
+  var planets = defs.map(function(d, i){
+    var g = new T.Group(), m = new T.Mesh(new T.SphereGeometry(d[0], 32, 24), new T.MeshStandardMaterial({map: tex(d[3], d[4], i + 11), roughness: 1}));
+    g.add(m); sys.add(g); sys.add(orbitLine(d[1]));
+    if(i === 5){
+      [[1.4,1.9,.75],[2.0,2.35,.45]].forEach(function(rg){
+        var ring = new T.Mesh(new T.RingGeometry(d[0]*rg[0], d[0]*rg[1], 64), new T.MeshBasicMaterial({color:0xd9c79a, transparent:true, opacity:rg[2], side:T.DoubleSide}));
+        ring.rotation.set(Math.PI/2 - .3, 0, .4); g.add(ring);
+      });
+    }
+    return {g:g, m:m, R:d[1], s:d[2], a:Math.random()*6.283};
+  });
+
+  // asteroid belt between Mars and Jupiter
+  var n = 1600, pos = new Float32Array(n*3);
+  for(var i=0;i<n;i++){ var a = Math.random()*6.283, R = 4.4 + Math.random()*.9; pos[i*3] = Math.cos(a)*R; pos[i*3+1] = (Math.random()-.5)*.25; pos[i*3+2] = Math.sin(a)*R; }
+  var bg = new T.BufferGeometry(); bg.setAttribute('position', new T.BufferAttribute(pos, 3));
+  var belt = new T.Points(bg, new T.PointsMaterial({color:0xcdb17f, size:.07})); sys.add(belt);
+
+  function fit(){
+    var w = box.clientWidth, h = box.clientHeight; if(!w || !h) return;
+    ren.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix();
+    var d = 30 * Math.max(1, .85 / cam.aspect);
+    cam.position.set(0, d * .5, d * .87); cam.lookAt(0, 0, 0);
+    draw();
+  }
+  function draw(){ ren.render(scene, cam); }
+  function tick(){
+    sys.rotation.y += .0012; belt.rotation.y += .0004; sun.rotation.y += .004;
+    planets.forEach(function(p){
+      p.a += p.s * .006; p.g.position.set(Math.cos(p.a)*p.R, 0, Math.sin(p.a)*p.R); p.m.rotation.y += .01;
+    });
+    draw(); if(!still) requestAnimationFrame(tick);
+  }
+
+  // drag to rotate
+  var down = false, lx = 0;
+  box.addEventListener('pointerdown', function(e){ down = true; lx = e.clientX; box.setPointerCapture(e.pointerId); });
+  box.addEventListener('pointermove', function(e){ if(!down) return; sys.rotation.y += (e.clientX - lx) * .008; lx = e.clientX; if(still) draw(); });
+  ['pointerup','pointercancel'].forEach(function(ev){ box.addEventListener(ev, function(){ down = false; }); });
+  addEventListener('resize', fit); fit(); tick();
+})();
+</script>
+</body>
+</html>
